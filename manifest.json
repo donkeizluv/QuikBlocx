@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "QuikBlocx",
+  "description": "A personal X.com companion for UX enhancements, shortcuts, and automations.",
+  "version": "0.1.0",
+  "action": {
+    "default_title": "QuikBlocx",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "options_page": "options.html",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://x.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://x.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

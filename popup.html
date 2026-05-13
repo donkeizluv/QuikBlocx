@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QuikBlocx</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="popup">
+      <p class="eyebrow">Chrome Extension</p>
+      <h1>QuikBlocx</h1>
+      <p class="subtitle">A ready-to-customize Manifest V3 starter.</p>
+
+      <section class="card">
+        <label class="field" for="message">
+          <span>Popup message</span>
+          <input id="message" name="message" type="text" placeholder="Hello from QuikBlocx" />
+        </label>
+        <button id="save-button" type="button">Save to storage</button>
+        <p id="status" class="status" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

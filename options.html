@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QuikBlocx Settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="panel">
+        <p class="eyebrow">Options</p>
+        <h1>QuikBlocx Settings</h1>
+        <p class="intro">Use this page to store extension-level preferences.</p>
+
+        <label class="row" for="highlight-color">
+          <span>Highlight color</span>
+          <input id="highlight-color" type="color" value="#b75e2b" />
+        </label>
+
+        <button id="save-options" type="button">Save settings</button>
+        <p id="options-status" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <script type="module" src="options.js"></script>
+  </body>
+</html>
