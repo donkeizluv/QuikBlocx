@@ -3,7 +3,17 @@
   "name": "QuikBlocx",
   "description": "A cure for X bot infestation.",
   "version": "0.1.0",
+  "icons": {
+    "16": "icon/nope.png",
+    "32": "icon/nope.png",
+    "48": "icon/nope.png",
+    "128": "icon/nope.png"
+  },
   "action": {
+    "default_icon": {
+      "16": "icon/nope.png",
+      "32": "icon/nope.png"
+    },
     "default_title": "QuikBlocx",
     "default_popup": "popup.html"
   },
