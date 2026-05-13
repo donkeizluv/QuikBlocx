@@ -8,17 +8,26 @@
   </head>
   <body>
     <main class="popup">
-      <p class="eyebrow">Chrome Extension</p>
+      <p class="eyebrow">X Companion</p>
       <h1>QuikBlocx</h1>
-      <p class="subtitle">A ready-to-customize Manifest V3 starter for X.</p>
+      <p class="subtitle">Live post scan for the current X timeline.</p>
 
       <section class="card">
-        <label class="field" for="message">
-          <span>Popup message</span>
-          <input id="message" name="message" type="text" placeholder="Hello from QuikBlocx" />
-        </label>
-        <button id="save-button" type="button">Save to storage</button>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-label">Posts found</span>
+            <strong id="post-count" class="stat-value">0</strong>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Tab status</span>
+            <strong id="tab-status" class="stat-value stat-value-small">Waiting</strong>
+          </div>
+        </div>
+
+        <button id="refresh-button" type="button">Refresh scan</button>
         <p id="status" class="status" aria-live="polite"></p>
+
+        <div id="posts-list" class="posts-list" aria-live="polite"></div>
       </section>
     </main>
 

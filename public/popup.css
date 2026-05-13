@@ -56,24 +56,34 @@ h1 {
   box-shadow: var(--shadow);
 }
 
-.field {
-  display: block;
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
-.field span {
+.stat {
+  padding: 12px;
+  border: 1px solid rgba(104, 75, 44, 0.14);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.stat-label {
   display: block;
-  margin-bottom: 8px;
   font-size: 14px;
+  color: var(--muted);
 }
 
-.field input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid rgba(104, 75, 44, 0.2);
-  border-radius: 12px;
-  font: inherit;
-  color: inherit;
-  background: rgba(255, 255, 255, 0.85);
+.stat-value {
+  display: block;
+  margin-top: 8px;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.stat-value-small {
+  font-size: 18px;
 }
 
 button {
@@ -97,4 +107,59 @@ button:hover {
   margin: 12px 0 0;
   color: var(--muted);
   font-size: 14px;
+}
+
+.posts-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  max-height: 320px;
+  overflow: auto;
+}
+
+.post-item {
+  padding: 12px;
+  border: 1px solid rgba(104, 75, 44, 0.12);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.post-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.post-author {
+  font-size: 15px;
+}
+
+.post-handle,
+.post-time {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.post-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.post-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--accent-strong);
+  text-decoration: none;
+}
+
+.empty-state {
+  padding: 14px;
+  border: 1px dashed rgba(104, 75, 44, 0.2);
+  border-radius: 14px;
+  color: var(--muted);
+  text-align: center;
 }

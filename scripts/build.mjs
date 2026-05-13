@@ -8,8 +8,11 @@ const rootDir = process.cwd();
 const publicDir = path.join(rootDir, "public");
 const distDir = path.join(rootDir, "dist");
 
-async function copyPublicAssets() {
+async function cleanDist() {
   await rm(distDir, { recursive: true, force: true });
+}
+
+async function copyPublicAssets() {
   await mkdir(distDir, { recursive: true });
   await cp(publicDir, distDir, { recursive: true });
 }
@@ -30,11 +33,13 @@ const buildOptions = {
 };
 
 if (watchMode) {
+  await cleanDist();
   await copyPublicAssets();
   const ctx = await context(buildOptions);
   await ctx.watch();
   console.log("Watching TypeScript sources. Re-run the command if you change files in public/.");
 } else {
+  await cleanDist();
   await copyPublicAssets();
   await build(buildOptions);
 }
