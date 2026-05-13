@@ -1,6 +1,10 @@
-const messageInput = document.querySelector("#message");
-const saveButton = document.querySelector("#save-button");
-const status = document.querySelector("#status");
+const messageInput = document.querySelector<HTMLInputElement>("#message");
+const saveButton = document.querySelector<HTMLButtonElement>("#save-button");
+const status = document.querySelector<HTMLParagraphElement>("#status");
+
+if (!messageInput || !saveButton || !status) {
+  throw new Error("Popup UI did not load correctly.");
+}
 
 async function loadSavedMessage() {
   const { popupMessage = "" } = await chrome.storage.sync.get("popupMessage");

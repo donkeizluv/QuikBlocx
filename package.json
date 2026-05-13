@@ -1,0 +1,17 @@
+{
+  "name": "quikblocx",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "yarn@1.22.22",
+  "description": "A personal X.com Chrome extension built with TypeScript.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "watch": "node scripts/build.mjs --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.292",
+    "esbuild": "^0.25.5",
+    "typescript": "^5.8.3"
+  }
+}

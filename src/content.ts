@@ -1,5 +1,9 @@
-chrome.runtime.onMessage.addListener((message) => {
-  if (message?.type !== "PING") {
+type PingMessage = {
+  type: "PING";
+};
+
+chrome.runtime.onMessage.addListener((message: PingMessage) => {
+  if (message.type !== "PING") {
     return;
   }
 

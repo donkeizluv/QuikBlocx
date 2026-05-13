@@ -1,6 +1,10 @@
-const colorInput = document.querySelector("#highlight-color");
-const saveButton = document.querySelector("#save-options");
-const status = document.querySelector("#options-status");
+const colorInput = document.querySelector<HTMLInputElement>("#highlight-color");
+const saveButton = document.querySelector<HTMLButtonElement>("#save-options");
+const status = document.querySelector<HTMLParagraphElement>("#options-status");
+
+if (!colorInput || !saveButton || !status) {
+  throw new Error("Options UI did not load correctly.");
+}
 
 async function restoreOptions() {
   const { highlightColor = "#b75e2b" } = await chrome.storage.sync.get("highlightColor");
