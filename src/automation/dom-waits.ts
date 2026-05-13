@@ -1,4 +1,4 @@
-export async function waitForElement<T extends Element>(
+export async function waitForElement<T>(
   getElement: () => T | null,
   timeoutMs = 3000,
   intervalMs = 100,
@@ -29,5 +29,9 @@ export function isVisible(element: Element) {
   }
 
   const style = window.getComputedStyle(element);
-  return style.display !== "none" && style.visibility !== "hidden" && element.offsetParent !== null;
+  return (
+    style.display !== "none" &&
+    style.visibility !== "hidden" &&
+    element.offsetParent !== null
+  );
 }

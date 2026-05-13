@@ -9,6 +9,7 @@ type PopupPost = {
 };
 
 type PostsResponse = {
+  currentHandle: string | null;
   posts: PopupPost[];
 };
 
@@ -22,6 +23,7 @@ void loadPosts();
 
 async function loadPosts() {
   setLoadingState();
+  await hydrateStoredHandle();
 
   const [activeTab] = await chrome.tabs.query({
     active: true,
@@ -42,6 +44,10 @@ async function loadPosts() {
     }) as PostsResponse | undefined;
 
     const posts = response?.posts ?? [];
+    const currentHandle = response?.currentHandle ?? null;
+
+    setCurrentHandle(currentHandle);
+    await chrome.storage.local.set({ currentHandle });
     renderPosts(posts);
     ui.postCount.textContent = String(posts.length);
     ui.tabStatus.textContent = "Connected";
@@ -122,18 +128,38 @@ function formatTimestamp(timestamp: string | null) {
   }).format(date);
 }
 
+async function hydrateStoredHandle() {
+  const { currentHandle = null } = await chrome.storage.local.get("currentHandle");
+  setCurrentHandle(currentHandle);
+}
+
+function setCurrentHandle(handle: string | null) {
+  if (!handle) {
+    ui.currentHandleValue.textContent = "No active captain yet";
+    ui.currentHandleHint.textContent = "Open X and we will spot your profile handle in a snap.";
+    return;
+  }
+
+  ui.currentHandleValue.textContent = handle;
+  ui.currentHandleHint.textContent = "You are in the cockpit. Ready to swat bots with flair.";
+}
+
 function getPopupUi() {
+  const currentHandleValue = document.querySelector<HTMLElement>("#current-handle");
+  const currentHandleHint = document.querySelector<HTMLParagraphElement>("#current-handle-hint");
   const postCount = document.querySelector<HTMLElement>("#post-count");
   const tabStatus = document.querySelector<HTMLElement>("#tab-status");
   const refreshButton = document.querySelector<HTMLButtonElement>("#refresh-button");
   const statusMessage = document.querySelector<HTMLParagraphElement>("#status");
   const postsList = document.querySelector<HTMLDivElement>("#posts-list");
 
-  if (!postCount || !tabStatus || !refreshButton || !statusMessage || !postsList) {
+  if (!currentHandleValue || !currentHandleHint || !postCount || !tabStatus || !refreshButton || !statusMessage || !postsList) {
     throw new Error("Popup UI did not load correctly.");
   }
 
   return {
+    currentHandleHint,
+    currentHandleValue,
     postCount,
     postsList,
     refreshButton,

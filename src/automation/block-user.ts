@@ -4,6 +4,11 @@ import { isVisible, waitForElement } from "./dom-waits";
 const BLOCK_FLOW_TIMEOUT_MS = 3000;
 const inFlightPosts = new WeakSet<XPost>();
 
+type DropdownBlockMatch = {
+  blockButton: HTMLElement;
+  dropdown: HTMLElement;
+};
+
 export async function runBlockFlow(post: XPost) {
   if (inFlightPosts.has(post)) {
     console.info("[QuikBlocx] Block flow already running for this post.");
@@ -33,22 +38,23 @@ export async function runBlockFlow(post: XPost) {
   try {
     caretButton.click();
 
-    const blockButton = await waitForElement(
-      () => findMatchingBlockButton(targetHandle),
+    const dropdownBlockMatch = await waitForElement(
+      () => findDropdownNBlockButton(targetHandle),
       BLOCK_FLOW_TIMEOUT_MS,
     );
 
-    if (!blockButton) {
+    if (!dropdownBlockMatch) {
       console.error(
         `[QuikBlocx] No matching block menu item found for ${targetHandle}.`,
       );
       return;
     }
 
+    const { blockButton } = dropdownBlockMatch;
     blockButton.click();
 
     const confirmationDialog = await waitForElement(
-      () => findMatchingConfirmationDialog(targetHandle),
+      () => findConfirmationDialog(targetHandle),
       BLOCK_FLOW_TIMEOUT_MS,
     );
 
@@ -77,7 +83,9 @@ export async function runBlockFlow(post: XPost) {
   }
 }
 
-function findMatchingBlockButton(targetHandle: string) {
+function findDropdownNBlockButton(
+  targetHandle: string,
+): DropdownBlockMatch | null {
   const dropdowns = Array.from(
     document.querySelectorAll<HTMLElement>('[data-testid="Dropdown"]'),
   );
@@ -96,14 +104,17 @@ function findMatchingBlockButton(targetHandle: string) {
 
     const buttonText = normalizeText(blockButton.innerText);
     if (buttonText.includes(targetHandle)) {
-      return blockButton;
+      return {
+        blockButton,
+        dropdown,
+      };
     }
   }
 
   return null;
 }
 
-function findMatchingConfirmationDialog(targetHandle: string) {
+function findConfirmationDialog(targetHandle: string) {
   const dialogs = Array.from(
     document.querySelectorAll<HTMLElement>(
       '[data-testid="confirmationSheetDialog"]',

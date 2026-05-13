@@ -10,8 +10,13 @@ type GetPostsMessage = {
 };
 
 type Message = PingMessage | GetPostsMessage;
+type PostsResponse = {
+  currentHandle: string | null;
+  posts: ReturnType<typeof summarizePost>[];
+};
 
 const processedPosts = new WeakSet<XPost>();
+let currentLoggedInHandle: string | null = null;
 
 chrome.runtime.onMessage.addListener((message: Message, _sender, sendResponse) => {
   if (message.type === "PING") {
@@ -20,25 +25,34 @@ chrome.runtime.onMessage.addListener((message: Message, _sender, sendResponse) =
   }
 
   if (message.type === "GET_POSTS") {
-    sendResponse({
+    const response: PostsResponse = {
+      currentHandle: getCurrentLoggedInHandle(),
       posts: findPosts().map(summarizePost)
-    });
+    };
+
+    void persistCurrentHandle(response.currentHandle);
+    sendResponse(response);
   }
 });
 
 initializePostObserver();
 
 function initializePostObserver() {
-  processNewPosts();
+  void syncPageState();
 
   const observer = new MutationObserver(() => {
-    processNewPosts();
+    void syncPageState();
   });
 
   observer.observe(document.body, {
     childList: true,
     subtree: true
   });
+}
+
+async function syncPageState() {
+  processNewPosts();
+  await persistCurrentHandle(getCurrentLoggedInHandle());
 }
 
 function processNewPosts() {
@@ -59,6 +73,31 @@ function processNewPosts() {
       post.dataset.quikblocxPermalink = permalink;
     }
   }
+}
+
+function getCurrentLoggedInHandle() {
+  const profileLink = document.querySelector<HTMLAnchorElement>(
+    '[data-testid="AppTabBar_Profile_Link"]',
+  );
+  const href = profileLink?.getAttribute("href");
+  const handleMatch = href?.match(/^\/([^/?#]+)/);
+
+  if (!handleMatch) {
+    return null;
+  }
+
+  return `@${handleMatch[1].toLowerCase()}`;
+}
+
+async function persistCurrentHandle(handle: string | null) {
+  if (handle === currentLoggedInHandle) {
+    return;
+  }
+
+  currentLoggedInHandle = handle;
+  await chrome.storage.local.set({
+    currentHandle: handle,
+  });
 }
 
 async function flashPage() {
