@@ -1,6 +1,8 @@
+export {};
+
 type PopupPost = {
   authorName: string;
-  handle: string;
+  xUserHandle: string;
   permalink: string;
   text: string;
   timestamp: string | null;
@@ -10,17 +12,9 @@ type PostsResponse = {
   posts: PopupPost[];
 };
 
-const postCount = document.querySelector<HTMLElement>("#post-count");
-const tabStatus = document.querySelector<HTMLElement>("#tab-status");
-const refreshButton = document.querySelector<HTMLButtonElement>("#refresh-button");
-const status = document.querySelector<HTMLParagraphElement>("#status");
-const postsList = document.querySelector<HTMLDivElement>("#posts-list");
+const ui = getPopupUi();
 
-if (!postCount || !tabStatus || !refreshButton || !status || !postsList) {
-  throw new Error("Popup UI did not load correctly.");
-}
-
-refreshButton.addEventListener("click", () => {
+ui.refreshButton.addEventListener("click", () => {
   void loadPosts();
 });
 
@@ -36,9 +30,9 @@ async function loadPosts() {
 
   if (!activeTab?.id || !activeTab.url?.startsWith("https://x.com/")) {
     renderPosts([]);
-    postCount.textContent = "0";
-    tabStatus.textContent = "Open X";
-    status.textContent = "Open an X tab, then refresh.";
+    ui.postCount.textContent = "0";
+    ui.tabStatus.textContent = "Open X";
+    ui.statusMessage.textContent = "Open an X tab, then refresh.";
     return;
   }
 
@@ -49,29 +43,29 @@ async function loadPosts() {
 
     const posts = response?.posts ?? [];
     renderPosts(posts);
-    postCount.textContent = String(posts.length);
-    tabStatus.textContent = "Connected";
-    status.textContent = `Scanned ${posts.length} posts on the current X tab.`;
+    ui.postCount.textContent = String(posts.length);
+    ui.tabStatus.textContent = "Connected";
+    ui.statusMessage.textContent = `Scanned ${posts.length} posts on the current X tab.`;
   } catch {
     renderPosts([]);
-    postCount.textContent = "0";
-    tabStatus.textContent = "Unavailable";
-    status.textContent = "Could not read posts from this tab yet. Reload the X page and try again.";
+    ui.postCount.textContent = "0";
+    ui.tabStatus.textContent = "Unavailable";
+    ui.statusMessage.textContent = "Could not read posts from this tab yet. Reload the X page and try again.";
   }
 }
 
 function setLoadingState() {
-  tabStatus.textContent = "Scanning";
-  status.textContent = "Reading posts from the current X tab...";
+  ui.tabStatus.textContent = "Scanning";
+  ui.statusMessage.textContent = "Reading posts from the current X tab...";
 }
 
 function renderPosts(posts: PopupPost[]) {
   if (posts.length === 0) {
-    postsList.innerHTML = '<div class="empty-state">No posts found in the current X timeline.</div>';
+    ui.postsList.innerHTML = '<div class="empty-state">No posts found in the current X timeline.</div>';
     return;
   }
 
-  postsList.replaceChildren(...posts.map(createPostItem));
+  ui.postsList.replaceChildren(...posts.map(createPostItem));
 }
 
 function createPostItem(post: PopupPost) {
@@ -91,9 +85,9 @@ function createPostItem(post: PopupPost) {
 
   header.append(author, time);
 
-  const handle = document.createElement("div");
-  handle.className = "post-handle";
-  handle.textContent = post.handle;
+  const userHandle = document.createElement("div");
+  userHandle.className = "user-handle";
+  userHandle.textContent = post.xUserHandle;
 
   const text = document.createElement("p");
   text.className = "post-text";
@@ -106,7 +100,7 @@ function createPostItem(post: PopupPost) {
   link.rel = "noreferrer";
   link.textContent = "Open post";
 
-  article.append(header, handle, text, link);
+  article.append(header, userHandle, text, link);
   return article;
 }
 
@@ -126,4 +120,24 @@ function formatTimestamp(timestamp: string | null) {
     hour: "numeric",
     minute: "2-digit"
   }).format(date);
+}
+
+function getPopupUi() {
+  const postCount = document.querySelector<HTMLElement>("#post-count");
+  const tabStatus = document.querySelector<HTMLElement>("#tab-status");
+  const refreshButton = document.querySelector<HTMLButtonElement>("#refresh-button");
+  const statusMessage = document.querySelector<HTMLParagraphElement>("#status");
+  const postsList = document.querySelector<HTMLDivElement>("#posts-list");
+
+  if (!postCount || !tabStatus || !refreshButton || !statusMessage || !postsList) {
+    throw new Error("Popup UI did not load correctly.");
+  }
+
+  return {
+    postCount,
+    postsList,
+    refreshButton,
+    statusMessage,
+    tabStatus
+  };
 }

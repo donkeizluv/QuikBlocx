@@ -1,4 +1,4 @@
-import { injectBlocButton } from "./inject";
+import { injectPostActions } from "./inject";
 import { findPosts, getPostPermalink, summarizePost, type XPost } from "./parser";
 
 type PingMessage = {
@@ -45,7 +45,7 @@ function processNewPosts() {
   const posts = findPosts();
 
   for (const post of posts) {
-    injectBlocButton(post);
+    injectPostActions(post);
 
     if (processedPosts.has(post)) {
       continue;

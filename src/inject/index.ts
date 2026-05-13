@@ -1,1 +1,1 @@
-export { injectBlocButton } from "./bloc-button";
+export { injectPostActions } from "./post-actions";

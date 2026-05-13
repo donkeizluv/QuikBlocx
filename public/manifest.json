@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "QuikBlocx",
-  "description": "A personal X.com companion for UX enhancements, shortcuts, and automations.",
+  "description": "A cure for X bot infestation.",
   "version": "0.1.0",
   "action": {
     "default_title": "QuikBlocx",
