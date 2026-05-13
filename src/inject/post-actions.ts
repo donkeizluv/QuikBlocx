@@ -12,7 +12,7 @@ type PostAction = {
 const postActions: PostAction[] = [
   {
     id: "bloc-button",
-    label: "Bloc",
+    label: "Nope!",
     ariaLabel: "quick block this user",
     accentColor: "244, 33, 46",
     onClick: async (post) => {

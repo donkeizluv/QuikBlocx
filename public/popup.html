@@ -8,24 +8,35 @@
   </head>
   <body>
     <main class="popup">
-      <p class="eyebrow">X Bot Infestation Pill</p>
-      <h1>QuikBlocx</h1>
-      <p class="subtitle">Live post scan for the current X timeline.</p>
+      <header class="hero">
+        <p class="eyebrow">Alert Mode</p>
+        <h1>QuikBlocx</h1>
+        <p class="subtitle">A cure for X bot infestation.</p>
+      </header>
 
       <section class="card">
+        <div class="speech-bubble">
+          <strong>Pow!</strong> Scan the active X tab and inspect every post we can currently see.
+        </div>
+
         <div class="stats">
           <div class="stat">
-            <span class="stat-label">Posts found</span>
+            <span class="stat-label">Posts Spotted</span>
             <strong id="post-count" class="stat-value">0</strong>
           </div>
           <div class="stat">
-            <span class="stat-label">Tab status</span>
+            <span class="stat-label">Signal Status</span>
             <strong id="tab-status" class="stat-value stat-value-small">Waiting</strong>
           </div>
         </div>
 
-        <button id="refresh-button" type="button">Refresh scan</button>
+        <button id="refresh-button" type="button">Scan This Timeline</button>
         <p id="status" class="status" aria-live="polite"></p>
+
+        <div class="section-heading">
+          <span class="section-kicker">Scene Report</span>
+          <h2>Visible Posts</h2>
+        </div>
 
         <div id="posts-list" class="posts-list" aria-live="polite"></div>
       </section>
