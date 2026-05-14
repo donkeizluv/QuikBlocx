@@ -1,5 +1,11 @@
 import { injectPostActions } from "./inject";
-import { findPosts, getPostPermalink, summarizePost, type XPost } from "./parser";
+import {
+  findPosts,
+  getPostHandle,
+  getPostPermalink,
+  summarizePost,
+  type XPost
+} from "./parser";
 
 type PingMessage = {
   type: "PING";
@@ -51,14 +57,20 @@ function initializePostObserver() {
 }
 
 async function syncPageState() {
-  processNewPosts();
   await persistCurrentHandle(getCurrentLoggedInHandle());
+  processNewPosts();
 }
 
 function processNewPosts() {
   const posts = findPosts();
 
   for (const post of posts) {
+    const postHandle = getPostHandle(post);
+    if (postHandle && postHandle === currentLoggedInHandle) {
+      removeInjectedPostActions(post);
+      continue;
+    }
+
     injectPostActions(post);
 
     if (processedPosts.has(post)) {
@@ -72,6 +84,12 @@ function processNewPosts() {
     if (permalink) {
       post.dataset.quikblocxPermalink = permalink;
     }
+  }
+}
+
+function removeInjectedPostActions(post: XPost) {
+  for (const action of post.querySelectorAll('[data-quikblocx-role]')) {
+    action.remove();
   }
 }
 
